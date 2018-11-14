@@ -1,0 +1,12 @@
+{
+    "application": "file-o",
+    "audio": "file-sound-o",
+    "font": "font",
+    "example": null,
+    "image": "image",
+    "message": "envelope-o",
+    "model": null,
+    "multipart": null,
+    "text": "file-text-o",
+    "video": "file-movie-o"
+}
