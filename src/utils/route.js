@@ -1,5 +1,5 @@
 const fs = require('fs')
-const path = require('path')
+// const path = require('path')
 const promisify = require('util').promisify
 const mime = require('./mime')
 
@@ -14,7 +14,8 @@ module.exports =  async function (req, res, filePath, config) {
 
 		if (stats.isFile()) {
 			// 是文件
-			const contentType = mime(filePath)
+			console.info(mime, config)
+			// const contentType = mime(filePath)
 		} else if (stats.isDirectory()) {
 			// 是文件夹
 		} else {

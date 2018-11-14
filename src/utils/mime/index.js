@@ -25,5 +25,5 @@ function getIconUrl(mimeType) {
 
 
 
-// console.log(getIconUrl('application/javascript'))
+console.info(getIconUrl('application/javascript'))
 // console.log(getIconUrl('text/html'))
