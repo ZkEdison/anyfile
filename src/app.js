@@ -22,5 +22,8 @@ class Server {
 	}
 }
 
+// run
+let server = new Server({})
+server.start()
 
 module.exports = Server
