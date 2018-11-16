@@ -36,7 +36,7 @@ module.exports =  async function (req, res, filePath, config) {
 					return {
 						filePath: path.join('/', dir, file),
 						file: file,
-						iconPath: mime.getIconUrl(mimeType)
+						iconPath: path.relative(filePath, mime.getIconUrl(mimeType))
 					}
 				})
 			}

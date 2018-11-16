@@ -17,6 +17,7 @@ class Server {
 
 		server.listen(this.conf.port, this.conf.hostname, () => {
 			let url = `http://${this.conf.hostname}:${this.conf.port}`
+
 			console.info(`Server started at ${chalk.green(url)}`)
 		})
 	}
