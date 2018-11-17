@@ -1,37 +1,37 @@
-
 const path = require('path')
 
-const Registries = require('./registries.json')
-const MimeTypes = require('./mime_types.json')
-const config = require('./config.json')
-const getMimeType = require('./mime.js')
-const defaultIcon = config.defaultIcon
-
-function generatePath(icon) {
-	return `${config.iconsPath}${icon}${config.iconsExtension}`
+const mimeTypes = {
+	'css': 'text/css',
+	'gif': 'image/gif',
+	'html': 'text/html',
+	'ico': 'image/x-icon',
+	'jpeg': 'image/jpeg',
+	'jpg': 'image/jpeg',
+	'js': 'application/javascript',
+	'json': 'application/json',
+	'pdf': 'application/pdf',
+	'png': 'image/png',
+	'svg': 'image/svg+xml',
+	'swf': 'application/x-shockwave-flash',
+	'tiff': 'image/tiff',
+	'txt': 'text/plain',
+	'wav': 'audio/x-wav',
+	'wma': 'audio/x-ms-wma',
+	'wmv': 'video/x-ms-wmv',
+	'xml': 'text/xml'
 }
 
-function getMimeRegistry(mimeType) {
-	return mimeType.split('/')[0]
-}
+module.exports = (filePath) => {
+	let ext = path.extname(filePath)
+		.split('.')
+		.pop()
+		.toLowerCase()
 
-function getIconUrl(mimeType) {
-	mimeType = mimeType.trim()
-	let file = MimeTypes[mimeType]
-	if (!file) {
-		const registry=getMimeRegistry(mimeType)
-		file=Registries[registry]
-		if(!file) file=defaultIcon
+	if (!ext) {
+		ext = filePath
 	}
-	return path.resolve(__dirname, generatePath(file))
-}
-
-
-
-// console.info(getIconUrl(getMimeType('././a.css')))
-// console.log(getIconUrl('text/html'))
-
-module.exports = {
-	getMimeType,
-	getIconUrl
+	return {
+		iconName: filePath.indexOf('.') > -1 ? ext : 'dir',
+		mimeTypes: mimeTypes[ext] || mimeTypes['txt']
+	}
 }

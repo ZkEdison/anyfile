@@ -21,7 +21,7 @@
 <body>
 	{{#each files}}
 		<a href="{{this.filePath}}">
-			<embed src="{{this.iconPath}}" style="display:inline-block;width:30px;height:30px;  vertical-align: top;" />
+			<image src="{{this.iconPath}}" style="display:inline-block;width:30px;height:30px;  vertical-align: top;" />
 			{{this.file}}
 		</a>
 	{{/each}}

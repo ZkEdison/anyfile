@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const promisify = require('util').promisify
-const mime = require('./mime')
+const getMimeType = require('./mime')
 const Handlebars = require('handlebars')
 
 const stat = promisify(fs.stat)
@@ -20,27 +20,30 @@ module.exports =  async function (req, res, filePath, config) {
 
 		if (stats.isFile()) {
 			// 是文件
-			console.info(mime, config)
 			// const contentType = mime(filePath)
 			// file 是一个buffer
 			let fileStream = fs.createReadStream(filePath)
 			fileStream.pipe(res)
 
 		} else if (stats.isDirectory()) {
-			let mimeType = mime.getMimeType(filePath)
+			let mimeTypeObj = getMimeType(filePath)
 			let files =  await readdir(filePath)
 			let dir = path.relative(config.root, filePath)
+
+			console.info(mimeTypeObj)
 			let data = {
 				title: path.basename(filePath),
 				files: files.map(file => {
 					return {
 						filePath: path.join('/', dir, file),
 						file: file,
-						iconPath: '/' + path.relative(config.root, mime.getIconUrl(mimeType))
+						iconPath: path.relative(
+							config.root,
+							path.resolve( __dirname, `./mime/icon/${getMimeType(file).iconName}.png`)
+						)
 					}
 				})
 			}
-			console.info(data)
 			res.end(template(data))
 		} else {
 
@@ -49,6 +52,5 @@ module.exports =  async function (req, res, filePath, config) {
 
 	} catch (error) {
 		res.end('404')
-		console.info(error)
 	}
 }
