@@ -1,8 +1,11 @@
 const fs = require('fs')
 const path = require('path')
 const promisify = require('util').promisify
-const getMimeType = require('./mime')
+const mime = require('./mime')
 const Handlebars = require('handlebars')
+const isFresh = require('./cache')
+const range = require('./range')
+const compress = require('./compress')
 
 const stat = promisify(fs.stat)
 const readdir = promisify(fs.readdir)
@@ -20,27 +23,47 @@ module.exports =  async function (req, res, filePath, config) {
 
 		if (stats.isFile()) {
 			// 是文件
-			// const contentType = mime(filePath)
-			// file 是一个buffer
-			let fileStream = fs.createReadStream(filePath)
-			fileStream.pipe(res)
+			const mimeType = mime(filePath)
+			res.setHeader('Content-Type', mimeType)
+
+			// 判断缓存是否是新鲜的
+			if (isFresh(stats, req, res)) {
+				res.statusCode = 304
+				res.end()
+				return
+			}
+
+			let rs
+			// 是不是range
+			let {code, start, end} = range(stats.size, req, res)
+			if (code === 200) {
+				res.statusCode = 200
+				rs = fs.createReadStream(filePath)
+			} else {
+				res.statusCode = 206
+				rs = fs.fileStream(filePath, {start, end})
+			}
+
+			// compress 压缩
+			if (filePath.match(config.compress)) {
+				rs = compress(rs, req, res)
+			}
+
+
+			rs.pipe(res)
 
 		} else if (stats.isDirectory()) {
-			let mimeTypeObj = getMimeType(filePath)
 			let files =  await readdir(filePath)
 			let dir = path.relative(config.root, filePath)
-
-			console.info(mimeTypeObj)
+			res.statusCode = 200
+			res.setHeader('Content-Type', 'text/html')
 			let data = {
 				title: path.basename(filePath),
+				dir: dir ? `/${dir}` : '',
 				files: files.map(file => {
 					return {
-						filePath: path.join('/', dir, file),
-						file: file,
-						iconPath: path.relative(
-							config.root,
-							path.resolve( __dirname, `./mime/icon/${getMimeType(file).iconName}.png`)
-						)
+						file,
+						icon: mime(file)
 					}
 				})
 			}
@@ -51,6 +74,8 @@ module.exports =  async function (req, res, filePath, config) {
 		}
 
 	} catch (error) {
-		res.end('404')
+		res.statusCode = 404
+		res.setHeader('Content-Type', 'text-plain')
+		res.end(`${filePath} not find`)
 	}
 }

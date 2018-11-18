@@ -30,8 +30,6 @@ module.exports = (filePath) => {
 	if (!ext) {
 		ext = filePath
 	}
-	return {
-		iconName: filePath.indexOf('.') > -1 ? ext : 'dir',
-		mimeTypes: mimeTypes[ext] || mimeTypes['txt']
-	}
+	return mimeTypes[ext] || mimeTypes['txt']
+
 }

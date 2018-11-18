@@ -6,22 +6,17 @@
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<title>{{title}}</title>
 	<style>
-		svg {
-			width: 20px !important;
-			height:20px !important;
-		}
 		a {
-			display: inline-block;
-			margin: 10px 30px;
-			width: 150px;
-			white-space: nowrap;
+			display: block;
+			font-size: 30px;
+			margin: 10px ;
 		}
 	</style>
 </head>
 <body>
 	{{#each files}}
-		<a href="{{this.filePath}}">
-			<image src="{{this.iconPath}}" style="display:inline-block;width:30px;height:30px;  vertical-align: top;" />
+		<a href="{{../dir}}/{{this.file}}">
+			{{}}
 			{{this.file}}
 		</a>
 	{{/each}}
