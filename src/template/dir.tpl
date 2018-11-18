@@ -16,7 +16,6 @@
 <body>
 	{{#each files}}
 		<a href="{{../dir}}/{{this.file}}">
-			{{}}
 			{{this.file}}
 		</a>
 	{{/each}}

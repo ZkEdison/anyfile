@@ -53,6 +53,7 @@ module.exports =  async function (req, res, filePath, config) {
 			rs.pipe(res)
 
 		} else if (stats.isDirectory()) {
+			console.info('isDirectory')
 			let files =  await readdir(filePath)
 			let dir = path.relative(config.root, filePath)
 			res.statusCode = 200
@@ -74,6 +75,7 @@ module.exports =  async function (req, res, filePath, config) {
 		}
 
 	} catch (error) {
+		console.error(error)
 		res.statusCode = 404
 		res.setHeader('Content-Type', 'text-plain')
 		res.end(`${filePath} not find`)
