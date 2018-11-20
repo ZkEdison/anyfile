@@ -1,8 +1,11 @@
 {
-  "name": "anyfile",
-  "version": "1.0.0",
+  "name": "anyfiles",
+  "version": "1.0.1",
   "description": "nodejs web server",
-  "main": "index.js",
+	"main": "src/index.js",
+	"bin": {
+		"anyfiles": "bin/anyfiles"
+	},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint .",

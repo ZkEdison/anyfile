@@ -2,4 +2,6 @@
 NodeJS Static Web Server
 
 
-### mimeTypes icon
+
+## 使用方法
+
